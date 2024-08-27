@@ -13,7 +13,7 @@ export const App = () => {
   useEffect(() => {
     const delta = 100;
     const interval = setInterval(() => {
-      setValue((v) => (v + 1000 / delta) % total);
+      setValue((v) => (v + 1) % total);
     }, delta);
     return () => clearInterval(interval);
   }, []);
@@ -36,7 +36,7 @@ export const App = () => {
 
       <div className="grid grid-rows-[minmax(0,1fr)_auto] gap-4 py-4">
         <div className="flex items-center justify-center h-full mx-auto">
-          <Clock currentValue={value} totalValue={100} />
+          <Clock currentValue={value} totalValue={total} />
         </div>
 
         <form
