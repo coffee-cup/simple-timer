@@ -11,7 +11,6 @@ fn greet(name: &str) -> String {
 
 #[tauri::command(async)]
 async fn play_alarm() {
-    println!("playing alarm");
     let (_stream, handle) = rodio::OutputStream::try_default().unwrap();
     let sink = rodio::Sink::try_new(&handle).unwrap();
 
