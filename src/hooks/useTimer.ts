@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { parseMs } from "../utils/time";
+import { invoke } from "@tauri-apps/api";
 
 export type TimerState = "running" | "paused";
 
@@ -16,8 +17,9 @@ export const useTimer = () => {
     durationMs: 0,
   });
 
-  const onTimerEnd = () => {
+  const onTimerEnd = async () => {
     console.log("timer ended!");
+    await invoke("play_alarm");
   };
 
   useEffect(() => {

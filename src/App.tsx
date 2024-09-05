@@ -1,5 +1,5 @@
 import { Pause, Play, RotateCcw } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { TimeRemaining } from "./components/TimeRemaining";
 import "./global.css";
 import { useTimer } from "./hooks/useTimer";
@@ -13,19 +13,7 @@ export const App = () => {
   const parsedValue = useMemo(() => parseMs(textValue), [textValue]);
   const isValid = parsedValue != null;
 
-  // useEffect(() => {
-  //   const delta = 100;
-  //   const interval = setInterval(() => {
-  //     setRemainingMs((v) => v - delta);
-  //   }, delta);
-  //   return () => clearInterval(interval);
-  // }, []);
-
   const isDirty = textValue !== timer.activeDurationString;
-
-  useEffect(() => {
-    console.log(timer);
-  }, [timer]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -101,24 +89,6 @@ export const App = () => {
             disabled={textValue.trim() === "" || !isValid}
             className={cn("text-green-500 border-green-500")}
           />
-
-          {/* <Button
-            type="button"
-            Icon={Pause}
-            text="Pause"
-            disabled={timer.state !== "running"}
-            className={cn("text-yellow-500 border-yellow-500")}
-          /> */}
-
-          {/* <Button
-            type="button"
-            Icon={RotateCcw}
-            text="Reset"
-            onClick={() => resetTimer(textValue)}
-            disabled={timer.state === "idle"}
-            noFill
-            className={cn("text-red-500 border-red-500")}
-          /> */}
         </form>
       </div>
     </div>
