@@ -1,3 +1,13 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+:root {
+  font-family: DepartureMono, serif, "Courier New", Courier, monospace;
+}
+
+@font-face {
+  font-display: block;
+  font-family: "DepartureMono";
+  src: url("/assets/DepartureMono-Regular.woff2");
+}

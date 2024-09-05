@@ -38,7 +38,7 @@ export const App = () => {
     textValue === timer.activeDurationString;
 
   return (
-    <div className="h-screen max-h-screen grid grid-rows-[auto_minmax(0,1fr)] bg-indigo-950 text-indigo-50">
+    <div className="h-screen max-h-screen grid grid-rows-[auto_minmax(0,1fr)] bg-indigo-950 text-indigo-50 selection:bg-fuchsia-400/30">
       <div
         data-tauri-drag-region
         className="h-7 select-none flex justify-end"
@@ -47,7 +47,10 @@ export const App = () => {
       <div className="grid gap-2 grid-cols-1 grid-rows-[minmax(0,1fr)_auto] items-center justify-center px-3 pb-3">
         <div
           data-tauri-drag-region
-          className="flex justify-center items-center text-5xl font-bold bg-indigo-900 text-pink-400 w-full h-full text-center rounded"
+          className="flex justify-center items-center text-5xl bg-indigo-900 w-full h-full text-center rounded text-fuchsia-500"
+          style={{
+            textShadow: "rgba(225,33,255,0.9) 0px 0px 42px",
+          }}
         >
           <TimeRemaining timer={timer} />
         </div>
@@ -56,11 +59,11 @@ export const App = () => {
           className="w-full grid grid-cols-1 gap-y-2 gap-x-1"
           onSubmit={handleSubmit}
         >
-          <div className="flex w-full bg-indigo-900 rounded border border-indigo-500">
+          <div className="flex w-full bg-indigo-900 rounded border border-indigo-500 focus-within:border-fuchsia-400">
             <input
               name="duration"
-              className="w-full bg-transparent px-3 py-2 focus:outline-none"
-              placeholder="Enter duration (e.g. 30s, 5m, 1h)"
+              className="w-full bg-transparent text-sm px-3 py-2 placeholder:text-fuchsia-300/60 text-fuchsia-300 focus:outline-none"
+              placeholder="Enter duration (30s, 5m, 1h)"
               value={textValue}
               onChange={(e) => setTextValue(e.target.value)}
             />
@@ -68,15 +71,13 @@ export const App = () => {
             {showResetButton && (
               <button
                 type="button"
+                className="text-fuchsia-200/60 mr-2 hover:text-fuchsia-200/80 focus:outline-none"
                 onClick={() => {
                   if (timer.activeDurationString == null) return;
                   startTimer(timer.activeDurationString);
                 }}
               >
-                <RotateCcw
-                  size={18}
-                  className="text-white/50 mr-2 hover:text-white/80"
-                />
+                <RotateCcw size={18} className="" />
               </button>
             )}
           </div>
@@ -87,7 +88,7 @@ export const App = () => {
               isDirty ? "Start" : timer.state === "running" ? "Pause" : "Resume"
             }
             disabled={textValue.trim() === "" || !isValid}
-            className={cn("text-green-500 border-green-500")}
+            className={cn("text-fuchsia-400 border-fuchsia-400")}
           />
         </form>
       </div>
