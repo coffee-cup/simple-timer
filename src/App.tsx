@@ -1,15 +1,13 @@
+import { Pause, Play, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
+import { TimeRemaining } from "./components/TimeRemaining";
 import "./global.css";
-import { Clock } from "./components/Clock";
-import { Play, Power, RotateCcw, Pause } from "lucide-react";
-import parse from "parse-duration";
-import { cn } from "./utils/styles";
 import { useTimer } from "./hooks/useTimer";
-import { formatMs, parseMs } from "./utils/time";
+import { cn } from "./utils/styles";
+import { parseMs } from "./utils/time";
 
 export const App = () => {
-  const { timer, startTimer } = useTimer();
+  const { timer, startTimer, pauseTimer, resumeTimer } = useTimer();
 
   const [textValue, setTextValue] = useState("");
   const parsedValue = useMemo(() => parseMs(textValue), [textValue]);
@@ -23,12 +21,33 @@ export const App = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
+  const isDirty = textValue !== timer.activeDurationString;
+
+  useEffect(() => {
+    console.log(timer);
+  }, [timer]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isValid) return;
 
-    startTimer(textValue);
+    if (isDirty) {
+      // Start the timer with a new duration
+      startTimer(textValue);
+    } else if (timer.state === "running") {
+      // Pause the timer
+      pauseTimer();
+    } else if (timer.state === "paused" && timer.durationMs > 0) {
+      // Resume the timer
+      resumeTimer();
+    } else {
+      // Start the timer with a new duration
+      startTimer(textValue);
+    }
   };
+
+  const showResetButton =
+    timer.activeDurationString != null &&
+    textValue === timer.activeDurationString;
 
   return (
     <div className="h-screen max-h-screen grid grid-rows-[auto_minmax(0,1fr)] bg-indigo-950 text-indigo-50">
@@ -42,32 +61,43 @@ export const App = () => {
           data-tauri-drag-region
           className="flex justify-center items-center text-5xl font-bold bg-indigo-900 text-pink-400 w-full h-full text-center rounded"
         >
-          <div
-            className="relative z-10 w-full"
-            // style={{
-            //   textShadow:
-            //     "0 0 5px #4ade80, 0 0 10px #4ade80, 0 0 15px #4ade80, 0 0 20px #4ade80",
-            // }}
-          >
-            {formatMs(timer.remainingMs)}
-          </div>
+          <TimeRemaining timer={timer} />
         </div>
 
         <form
-          className="w-full grid grid-cols-[auto_1fr_1fr] gap-y-2 gap-x-1"
+          className="w-full grid grid-cols-1 gap-y-2 gap-x-1"
           onSubmit={handleSubmit}
         >
-          <input
-            name="duration"
-            className="w-full bg-indigo-900 text-indigo-50 border border-indigo-500 rounded px-2 py-1 max-w-[80px]"
-            placeholder="30s, 5m"
-            value={textValue}
-            onChange={(e) => setTextValue(e.target.value)}
-          />
+          <div className="flex w-full bg-indigo-900 rounded border border-indigo-500">
+            <input
+              name="duration"
+              className="w-full bg-transparent px-3 py-2 focus:outline-none"
+              placeholder="Enter duration (e.g. 30s, 5m, 1h)"
+              value={textValue}
+              onChange={(e) => setTextValue(e.target.value)}
+            />
+
+            {showResetButton && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (timer.activeDurationString == null) return;
+                  startTimer(timer.activeDurationString);
+                }}
+              >
+                <RotateCcw
+                  size={18}
+                  className="text-white/50 mr-2 hover:text-white/80"
+                />
+              </button>
+            )}
+          </div>
 
           <Button
-            Icon={Play}
-            text="Start"
+            Icon={isDirty ? Play : timer.state === "running" ? Pause : Play}
+            text={
+              isDirty ? "Start" : timer.state === "running" ? "Pause" : "Resume"
+            }
             disabled={textValue.trim() === "" || !isValid}
             className={cn("text-green-500 border-green-500")}
           />
@@ -80,14 +110,15 @@ export const App = () => {
             className={cn("text-yellow-500 border-yellow-500")}
           /> */}
 
-          <Button
+          {/* <Button
             type="button"
             Icon={RotateCcw}
             text="Reset"
-            disabled={timer.state === "running" || timer.state === "paused"}
+            onClick={() => resetTimer(textValue)}
+            disabled={timer.state === "idle"}
             noFill
             className={cn("text-red-500 border-red-500")}
-          />
+          /> */}
         </form>
       </div>
     </div>
@@ -108,7 +139,7 @@ const Button = ({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button
     className={cn(
-      `flex gap-1 items-center justify-center text-sm border rounded px-2 py-1`,
+      `flex gap-1 items-center justify-center text-sm border-2 rounded px-2 py-2`,
       "disabled:opacity-50",
       className
     )}

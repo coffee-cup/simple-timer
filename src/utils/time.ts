@@ -1,6 +1,9 @@
 import parse from "parse-duration";
 
 export const formatMs = (ms: number) => {
+  // Round up to the nearest second if within 500ms of the next second
+  ms = Math.round(ms / 1000) * 1000;
+
   const hours = Math.floor(ms / 3600000);
   const minutes = Math.floor((ms % 3600000) / 60000);
   const seconds = Math.floor((ms % 60000) / 1000);

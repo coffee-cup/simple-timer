@@ -33,7 +33,7 @@
       {
         "title": "timer",
         "width": 300,
-        "height": 200,
+        "height": 280,
         "maximizable": false,
         "resizable": false,
         "hiddenTitle": true,

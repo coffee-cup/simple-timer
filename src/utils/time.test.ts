@@ -5,9 +5,10 @@ test("formatMs", () => {
   expect(formatMs(0)).toBe("00:00");
   expect(formatMs(100)).toBe("00:00");
   expect(formatMs(1000)).toBe("00:01");
-  expect(formatMs(59999)).toBe("00:59");
+  expect(formatMs(29997)).toBe("00:30");
+  expect(formatMs(59999)).toBe("01:00");
   expect(formatMs(60000)).toBe("01:00");
-  expect(formatMs(3599999)).toBe("59:59");
+  expect(formatMs(3599999)).toBe("01:00:00");
   expect(formatMs(3600000)).toBe("01:00:00");
   expect(formatMs(36000000)).toBe("10:00:00");
   expect(formatMs(360000000)).toBe("100:00:00");
