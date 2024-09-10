@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "simple-timer",
+    "productName": "Simple Timer",
     "version": "0.0.1"
   },
   "tauri": {
