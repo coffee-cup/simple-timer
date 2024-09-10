@@ -40,13 +40,13 @@ export const useTimer = () => {
     }
   }, [timer.state, timer.startTime, timer.durationMs]);
 
-  const startTimer = (durationString: string) => {
+  const startTimer = (durationString: string, startImmediately = true) => {
     const durationMs = parseMs(durationString);
     if (durationMs == null) return;
 
     setTimer({
-      state: "running",
-      startTime: Date.now(),
+      state: startImmediately ? "running" : "paused",
+      startTime: startImmediately ? Date.now() : undefined,
       activeDurationString: durationString,
       durationMs: durationMs,
     });

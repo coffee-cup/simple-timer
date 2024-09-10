@@ -13,7 +13,7 @@ export const App = () => {
   const parsedValue = useMemo(() => parseMs(textValue), [textValue]);
   const isValid = parsedValue != null;
 
-  const isDirty = textValue !== timer.activeDurationString;
+  const isDirty = textValue.trim() !== timer.activeDurationString;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,7 +35,7 @@ export const App = () => {
 
   const showResetButton =
     timer.activeDurationString != null &&
-    textValue === timer.activeDurationString;
+    textValue.trim() === timer.activeDurationString;
 
   return (
     <div className="h-screen max-h-screen grid grid-rows-[auto_minmax(0,1fr)] bg-indigo-950 text-indigo-50 selection:bg-fuchsia-400/30">
@@ -47,11 +47,19 @@ export const App = () => {
       <div className="grid gap-2 grid-cols-1 grid-rows-[minmax(0,1fr)_auto] items-center justify-center px-3 pb-3">
         <div
           data-tauri-drag-region
-          className="flex justify-center items-center text-5xl bg-indigo-900 w-full h-full text-center rounded text-fuchsia-500"
+          className="flex justify-center items-center text-5xl bg-indigo-900 w-full h-full text-center rounded text-fuchsia-500 relative overflow-hidden"
           style={{
             textShadow: "rgba(225,33,255,0.9) 0px 0px 42px",
           }}
         >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)",
+              backgroundSize: "100% 2px",
+            }}
+          />
           <TimeRemaining timer={timer} />
         </div>
 
@@ -59,10 +67,10 @@ export const App = () => {
           className="w-full grid grid-cols-1 gap-y-2 gap-x-1"
           onSubmit={handleSubmit}
         >
-          <div className="flex w-full bg-indigo-900 rounded border border-indigo-500 focus-within:border-fuchsia-400">
+          <div className="flex w-full bg-indigo-900 rounded border border-transparent focus-within:border-fuchsia-500">
             <input
               name="duration"
-              className="w-full bg-transparent text-sm px-3 py-2 placeholder:text-fuchsia-300/60 text-fuchsia-300 focus:outline-none"
+              className="w-full bg-transparent text-sm px-3 py-2 h-[40px] placeholder:text-fuchsia-300/60 text-fuchsia-300 focus:outline-none"
               placeholder="Enter duration (30s, 5m, 1h)"
               value={textValue}
               onChange={(e) => setTextValue(e.target.value)}
@@ -74,7 +82,10 @@ export const App = () => {
                 className="text-fuchsia-200/60 mr-2 hover:text-fuchsia-200/80 focus:outline-none"
                 onClick={() => {
                   if (timer.activeDurationString == null) return;
-                  startTimer(timer.activeDurationString);
+                  startTimer(
+                    timer.activeDurationString,
+                    timer.state === "running"
+                  );
                 }}
               >
                 <RotateCcw size={18} className="" />
@@ -88,7 +99,6 @@ export const App = () => {
               isDirty ? "Start" : timer.state === "running" ? "Pause" : "Resume"
             }
             disabled={textValue.trim() === "" || !isValid}
-            className={cn("text-fuchsia-400 border-fuchsia-400")}
           />
         </form>
       </div>
@@ -110,8 +120,9 @@ const Button = ({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button
     className={cn(
-      `flex gap-1 items-center justify-center text-sm border-2 rounded px-2 py-2`,
-      "disabled:opacity-50",
+      `flex gap-1 items-center justify-center text-sm border-2 rounded px-2 py-2 h-[40px]`,
+      "text-fuchsia-500 border-fuchsia-500",
+      "disabled:opacity-60",
       className
     )}
     {...props}

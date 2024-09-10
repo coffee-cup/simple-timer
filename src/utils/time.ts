@@ -19,7 +19,15 @@ export const formatMs = (ms: number) => {
   }
 };
 
-export const parseMs = (time: string, _maxMs?: number | null) => {
+export const parseMs = (
+  time: string,
+  _maxMs?: number | null
+): number | null => {
+  const isAllNumeric = time.trim().length > 0 && /^[0-9]+$/.test(time);
+  if (isAllNumeric) {
+    time = `${time}s`;
+  }
+
   const maxMs = _maxMs === undefined ? parse("99h") : _maxMs;
   const parsed = parse(time);
 

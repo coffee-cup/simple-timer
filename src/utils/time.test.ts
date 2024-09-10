@@ -16,8 +16,8 @@ test("formatMs", () => {
 
 test("parseMs", () => {
   expect(parseMs("0")).toBe(0);
-  expect(parseMs("100")).toBe(100);
-  expect(parseMs("1000")).toBe(1000);
+  expect(parseMs("100")).toBe(100 * 1000);
+  expect(parseMs("1000")).toBe(1000 * 1000);
   expect(parseMs("10s")).toBe(10 * 1000);
   expect(parseMs("30m")).toBe(30 * 60 * 1000);
   expect(parseMs("2h")).toBe(2 * 60 * 60 * 1000);
