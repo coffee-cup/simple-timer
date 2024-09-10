@@ -4,6 +4,10 @@
 
 Simple af timer app made with Tauri
 
+## Installation
+
+[Download the latest version here](https://github.com/coffee-cup/simple-timer/releases/latest)
+
 ## How to use
 
 1. ⏰ Enter time in plain text (e.g. 30s, 2m, 1.5d)
