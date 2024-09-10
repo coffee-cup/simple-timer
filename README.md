@@ -2,8 +2,7 @@
 
 [![CI](https://github.com/coffee-cup/simple-timer/actions/workflows/ci.yml/badge.svg)](https://github.com/coffee-cup/simple-timer/actions/workflows/ci.yml)
 
-![screenshot-2024-09-05-02 09 03](https://github.com/user-attachments/assets/481b69b5-da7d-46ff-8163-947f829bd1a8)
-
+![App Screenshot](./screenshot.png)
 
 Simple af timer app made with Tauri
 
