@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import { formatMs } from "../utils/time";
+import { useEffect, useState } from "react";
 import { Timer } from "../hooks/useTimer";
+import { formatMs } from "../utils/time";
 
 const UPDATE_FREQUENCY = 300;
 
